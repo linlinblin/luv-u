@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>для самого любимого енота</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* === ЦВЕТА — меняй здесь === */
+    --bg: #090914;
+    --bg-card: #11102a;
+    --bg-card-hover: #1a183a;
+    --accent: #9b7fe8;
+    --accent-soft: #c4aaff;
+    --accent-glow: rgba(155, 127, 232, 0.18);
+    --text-main: #e8e0f5;
+    --text-muted: #7a6a9a;
+    --text-soft: #b8a8d8;
+    --border: rgba(155, 127, 232, 0.2);
+    --border-hover: rgba(155, 127, 232, 0.5);
+    --music-bg: #0d0c22;
+    --music-link: #c4aaff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── ЗВЁЗДЫ ── */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d) ease-in-out infinite;
+    animation-delay: var(--dl);
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--op); }
+  }
+
+  /* ── ОБЩИЙ КОНТЕЙНЕР ── */
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  /* ── ШАПКА ── */
+  .hero {
+    text-align: center;
+    padding: 100px 0 70px;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    /* === ЗАГОЛОВОК САЙТА — меняй здесь === */
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent-soft);
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .scroll-hint {
+    margin-top: 48px;
+    color: var(--text-muted);
+    font-size: 13px;
+    animation: float 2.5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  /* ── СЕКЦИЯ ПРИЧИН ── */
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    padding-top: 20px;
+  }
+
+  /* === ГЛАВНЫЙ ЗАГОЛОВОК БЛОКА С ПРИЧИНАМИ — меняй здесь === */
+  .reasons-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 400;
+    color: var(--text-main);
+    margin-bottom: 40px;
+    line-height: 1.3;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 80px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, var(--accent-glow), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--accent-soft);
+    margin-bottom: 0;
+    transition: margin-bottom 0.3s;
+  }
+  .card-body {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text-soft);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.3s;
+    opacity: 0;
+  }
+  .card.open .card-body {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 14px;
+  }
+  .card-arrow {
+    position: absolute;
+    top: 24px;
+    right: 22px;
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.3s, color 0.3s;
+    user-select: none;
+  }
+  .card.open .card-arrow {
+    transform: rotate(45deg);
+    color: var(--accent-soft);
+  }
+
+  /* ── РАЗДЕЛИТЕЛЬ ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 60px 0 50px;
+  }
+  .divider-line {
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+  .divider-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* ── МУЗЫКАЛЬНЫЙ БЛОК ── */
+  /* === ЗАГОЛОВОК МУЗЫКАЛЬНОГО БЛОКА — меняй здесь === */
+  .music-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 400;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .music-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .track {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 0 16px;
+    align-items: start;
+    padding: 18px 0;
+    border-bottom: 0.5px solid var(--border);
+    transition: background 0.2s;
+  }
+  .track:first-child { border-top: 0.5px solid var(--border); }
+
+  .track-num {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .track-info {}
+  .track-link {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--music-link);
+    text-decoration: none;
+    font-style: italic;
+    transition: color 0.2s;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .track-link:hover {
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .track-artist {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .track-note {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ── ФИНАЛЬНАЯ СТРОКА ── */
+  .footer-note {
+    text-align: center;
+    margin-top: 80px;
+    padding-bottom: 40px;
+  }
+  .footer-note p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .footer-note .signature {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    opacity: 0.6;
+  }
+
+  /* ── SPARKLE ── */
+  .sparkle-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    animation: sparkle-fly 0.9s ease-out forwards;
+    font-size: 14px;
+  }
+  @keyframes sparkle-fly {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-70px) scale(0.3); }
+  }
+
+  /* ── SCROLL FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 500px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .hero { padding: 70px 0 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<div class="page">
+
+  <!-- ── ШАПКА ── -->
+  <header class="hero fade-in">
+    <p class="hero-eyebrow">с любовью · для тебя</p>
+    <!-- === ГЛАВНЫЙ ЗАГОЛОВОК — меняй текст между тегами === -->
+    <h1 class="hero-title">для самого<br><em>любимого енота</em></h1>
+    <p class="hero-sub">нажимай на карточки — внутри кое-что есть</p>
+    <div class="scroll-hint">↓</div>
+  </header>
+
+  <!-- ── ПРИЧИНЫ ── -->
+  <section>
+    <p class="section-label fade-in">блок первый</p>
+    <!-- === ЗАГОЛОВОК БЛОКА С ПРИЧИНАМИ — меняй здесь === -->
+    <h2 class="reasons-heading fade-in">Что мне нравится в тебе?</h2>
+
+    <div class="cards-grid">
+
+      <!-- === КАРТОЧКИ — меняй заголовок в .card-title и текст в .card-body === -->
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твоя внимательность</div>
+        <div class="card-body">тебе хватило одного раза, чтобы запомнить какой кофе я люблю и какие сладости мне нравятся. я до сих пор помню полку с киндер кантри ♡</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твой смех</div>
+        <div class="card-body">я помню, как мы слушали тупые песни в метро и смеялись на всю станцию, а люди смотрели на нас как на ненормальных</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твоя решительность</div>
+        <div class="card-body">когда мы ездили в питер и калининград, я очень волновалась и не понимала, за что хвататься — впервые ехала куда-то без родителей. я очень благодарна тебе, что ты решал все важные вопросы</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твои руки</div>
+        <div class="card-body">каждый раз когда мы вместе — гуляем или просто где-то рядом — мне нравится как ты перебираешь пальцами, ища мою руку, а потом берёшь её в свою и больше не отпускаешь</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твоё тепло</div>
+        <div class="card-body">каждый раз, когда мы спим вместе, ты накрываешь меня одеялом. я каждый раз просыпаюсь от этого — и от того, что ты обнимаешь меня со спины, когда я ворочаюсь во сне</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твоя забота</div>
+        <div class="card-body">когда мне было плохо, ты всегда был рядом — и морально, и физически. и готовил мне самую вкусную пасту, когда я болела ♡</div>
+      </div>
+
+      <div class="card fade-in" onclick="toggleCard(this, event)">
+        <span class="card-arrow">+</span>
+        <div class="card-title">твой свет</div>
+        <div class="card-body">не знаю как передать, но тебя очень легко узнать в толпе по твоей энергии. наверно именно это меня и зацепило год назад</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── РАЗДЕЛИТЕЛЬ ── -->
+  <div class="divider fade-in">
+    <div class="divider-line"></div>
+    <div class="divider-dot"></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ── МУЗЫКА ── -->
+  <section>
+    <p class="section-label fade-in">блок второй</p>
+    <!-- === ЗАГОЛОВОК МУЗЫКАЛЬНОГО БЛОКА — меняй здесь === -->
+    <h2 class="music-heading fade-in">песни, которые звучат как ты</h2>
+    <p class="music-sub fade-in">нажми на название — откроется в яндекс.музыке</p>
+
+    <div class="track-list">
+
+      <!-- === ТРЕКИ — меняй название, исполнителя, ссылку и текст под каждым === -->
+
+      <div class="track fade-in">
+        <span class="track-num">01</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/8632508/track/57404962" target="_blank">Родная</a>
+          <div class="track-artist">Обстоятельства</div>
+          <div class="track-note">первый трек, который я тебе кинула. невероятно нежный и добрый. для меня он звучит как рассветы, что мы вместе встречали, танцы на кухне и лето</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">02</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/9368637/track/50384811" target="_blank">Семнадцать желаний</a>
+          <div class="track-artist">Saypink!</div>
+          <div class="track-note">«держать тебя за руку даже во сне — это значит любить тебя больше чем сильно». мне очень нравится эта строчка, она олицетворяет нас</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">03</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/25664459/track/113351156" target="_blank">Порвав поводок</a>
+          <div class="track-artist">Noise MC</div>
+          <div class="track-note">помню летом мы сидели у меня во дворе и пели её друг другу</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">04</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/32913796/track/130214486" target="_blank">Зря</a>
+          <div class="track-artist">PRAYFORME</div>
+          <div class="track-note">эта песня звучит как признание и как начало нашей истории</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">05</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/12348427/track/34942045" target="_blank">Утро</a>
+          <div class="track-artist">Дайте танк(!)</div>
+          <div class="track-note">оно такое же беззаботное, доброе и лёгкое, как каждое утро с тобой</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">06</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/23593193/track/107522081" target="_blank">немерено</a>
+          <div class="track-artist">лампабикт, Элли на маковом поле</div>
+          <div class="track-note">удивительное совпадение: каждый раз когда я еду к тебе в метро, в наушниках включается эта песня</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">07</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/37715162/track/141683222" target="_blank">Sunsetz</a>
+          <div class="track-artist">Cigarettes After Sex</div>
+          <div class="track-note">этот трек играл в 6 утра, когда я ехала в такси с букетом цветов от тебя, в твой день рождения</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">08</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/8315475/track/56263692" target="_blank">День, когда мы встретились с тобой</a>
+          <div class="track-artist">папин олимпос</div>
+          <div class="track-note">мне хочется сыграть тебе её на гитаре. я пыталась в голосовых ещё год назад, но думаю, вживую будет лучше</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">09</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/5356295/track/41044412" target="_blank">я приду к тебе с клубникой в декабре</a>
+          <div class="track-artist">pyrokinesis</div>
+          <div class="track-note">и ты ведь пришёл ♡</div>
+        </div>
+      </div>
+
+      <div class="track fade-in">
+        <span class="track-num">10</span>
+        <div class="track-info">
+          <a class="track-link" href="https://music.yandex.ru/album/30186026/track/123640294" target="_blank">Run, Get Drunk & Fall in Love Again</a>
+          <div class="track-artist">Lurve</div>
+          <div class="track-note">эта песня напоминает мне как мы бежали по станции метро, смеялись, целовались на эскалаторе и держали друг друга за руки</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ФИНАЛ ── -->
+  <div class="footer-note fade-in">
+    <!-- === ФИНАЛЬНАЯ ФРАЗА — меняй здесь === -->
+    <p>спасибо, что ты есть.<br>просто за то, что ты — это ты.</p>
+    <p class="signature">с любовью ♡</p>
+  </div>
+
+</div>
+
+<script>
+  /* ── ЗВЁЗДЫ ── */
+  const sf = document.getElementById('starfield');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() < 0.7 ? 1 : 2;
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      width:${sz}px; height:${sz}px;
+      --d:${2+Math.random()*5}s;
+      --dl:${Math.random()*6}s;
+      --op:${(0.2+Math.random()*0.7).toFixed(2)};
+    `;
+    sf.appendChild(s);
+  }
+
+  /* ── КАРТОЧКИ ── */
+  function toggleCard(card, e) {
+    const wasOpen = card.classList.contains('open');
+    card.classList.toggle('open');
+    if (!wasOpen) spawnSparkles(e.clientX, e.clientY);
+  }
+
+  /* ── SPARKLE ── */
+  function spawnSparkles(x, y) {
+    ['✦','·','✧','★','♡'].forEach((ch, i) => {
+      const el = document.createElement('div');
+      el.className = 'sparkle-particle';
+      el.textContent = ch;
+      el.style.cssText = `
+        left:${x + (Math.random()-0.5)*50}px;
+        top:${y}px;
+        animation-delay:${i*0.07}s;
+        color: hsl(${260+Math.random()*40}, 70%, 80%);
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1100);
+    });
+  }
+
+  /* ── FADE IN ПРИ СКРОЛЛЕ ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
