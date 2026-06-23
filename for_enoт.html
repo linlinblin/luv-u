@@ -11,7 +11,6 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    /* === ЦВЕТА — меняй здесь === */
     --bg: #090914;
     --bg-card: #11102a;
     --bg-card-hover: #1a183a;
@@ -37,7 +36,7 @@
     overflow-x: hidden;
   }
 
-  /* ── ЗВЁЗДЫ ── */
+ 
   #starfield {
     position: fixed;
     inset: 0;
@@ -57,7 +56,7 @@
     50% { opacity: var(--op); }
   }
 
-  /* ── ОБЩИЙ КОНТЕЙНЕР ── */
+  
   .page {
     position: relative;
     z-index: 1;
@@ -66,7 +65,7 @@
     padding: 0 24px 100px;
   }
 
-  /* ── ШАПКА ── */
+ 
   .hero {
     text-align: center;
     padding: 100px 0 70px;
@@ -79,7 +78,7 @@
     margin-bottom: 20px;
   }
   .hero-title {
-    /* === ЗАГОЛОВОК САЙТА — меняй здесь === */
+    
     font-family: 'Playfair Display', serif;
     font-size: clamp(32px, 6vw, 52px);
     font-weight: 400;
@@ -117,7 +116,7 @@
     padding-top: 20px;
   }
 
-  /* === ГЛАВНЫЙ ЗАГОЛОВОК БЛОКА С ПРИЧИНАМИ — меняй здесь === */
+ 
   .reasons-heading {
     font-family: 'Playfair Display', serif;
     font-size: clamp(22px, 4vw, 32px);
@@ -195,7 +194,7 @@
     color: var(--accent-soft);
   }
 
-  /* ── РАЗДЕЛИТЕЛЬ ── */
+ 
   .divider {
     display: flex;
     align-items: center;
@@ -215,8 +214,7 @@
     opacity: 0.6;
   }
 
-  /* ── МУЗЫКАЛЬНЫЙ БЛОК ── */
-  /* === ЗАГОЛОВОК МУЗЫКАЛЬНОГО БЛОКА — меняй здесь === */
+ 
   .music-heading {
     font-family: 'Playfair Display', serif;
     font-size: clamp(20px, 4vw, 28px);
@@ -283,7 +281,7 @@
     font-weight: 300;
   }
 
-  /* ── ФИНАЛЬНАЯ СТРОКА ── */
+ 
   .footer-note {
     text-align: center;
     margin-top: 80px;
@@ -304,7 +302,7 @@
     opacity: 0.6;
   }
 
-  /* ── SPARKLE ── */
+ 
   .sparkle-particle {
     position: fixed;
     pointer-events: none;
@@ -317,7 +315,7 @@
     100% { opacity: 0; transform: translateY(-70px) scale(0.3); }
   }
 
-  /* ── SCROLL FADE IN ── */
+ 
   .fade-in {
     opacity: 0;
     transform: translateY(24px);
@@ -340,7 +338,7 @@
 
 <div class="page">
 
-  <!-- ── ШАПКА ── -->
+  
   <header class="hero fade-in">
     <p class="hero-eyebrow">с любовью · для тебя</p>
     <!-- === ГЛАВНЫЙ ЗАГОЛОВОК — меняй текст между тегами === -->
@@ -349,14 +347,13 @@
     <div class="scroll-hint">↓</div>
   </header>
 
-  <!-- ── ПРИЧИНЫ ── -->
+
   <section>
-    <!-- === ЗАГОЛОВОК БЛОКА С ПРИЧИНАМИ — меняй здесь === -->
     <h2 class="reasons-heading fade-in">Что мне нравится в тебе?</h2>
 
     <div class="cards-grid">
 
-      <!-- === КАРТОЧКИ — меняй заголовок в .card-title и текст в .card-body === -->
+      
 
       <div class="card fade-in" onclick="toggleCard(this, event)">
         <span class="card-arrow">+</span>
@@ -403,22 +400,22 @@
     </div>
   </section>
 
-  <!-- ── РАЗДЕЛИТЕЛЬ ── -->
+
   <div class="divider fade-in">
     <div class="divider-line"></div>
     <div class="divider-dot"></div>
     <div class="divider-line"></div>
   </div>
 
-  <!-- ── МУЗЫКА ── -->
+
   <section>
-    <!-- === ЗАГОЛОВОК МУЗЫКАЛЬНОГО БЛОКА — меняй здесь === -->
+
     <h2 class="music-heading fade-in">песни, которые звучат как ты</h2>
     <p class="music-sub fade-in">нажми на название чтобы послушать</p>
 
     <div class="track-list">
 
-      <!-- === ТРЕКИ — меняй название, исполнителя, ссылку и текст под каждым === -->
+
 
       <div class="track fade-in">
         <span class="track-num">01</span>
@@ -523,7 +520,7 @@
 </div>
 
 <script>
-  /* ── ЗВЁЗДЫ ── */
+  
   const sf = document.getElementById('starfield');
   for (let i = 0; i < 120; i++) {
     const s = document.createElement('div');
@@ -540,14 +537,14 @@
     sf.appendChild(s);
   }
 
-  /* ── КАРТОЧКИ ── */
+ 
   function toggleCard(card, e) {
     const wasOpen = card.classList.contains('open');
     card.classList.toggle('open');
     if (!wasOpen) spawnSparkles(e.clientX, e.clientY);
   }
 
-  /* ── SPARKLE ── */
+  
   function spawnSparkles(x, y) {
     ['✦','·','✧','★','♡'].forEach((ch, i) => {
       const el = document.createElement('div');
@@ -564,7 +561,7 @@
     });
   }
 
-  /* ── FADE IN ПРИ СКРОЛЛЕ ── */
+  
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
